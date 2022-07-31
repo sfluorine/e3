@@ -5,6 +5,7 @@
 typedef enum {
   TOK_ID = 0, // x || y
   TOK_NUMBER, // 69420
+  TOK_FUN, // fun
   TOK_VAR, // var
   TOK_RETURN, // return
   TOK_ASSIGN, // =

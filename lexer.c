@@ -42,6 +42,10 @@ Token LexerGetToken(Lexer* lexer) {
     } while (isalnum(*lexer->source));
 
     StringView keyword = StringViewNew(start, count);
+
+    if (StringViewCmp(keyword, "fun"))
+      return TokenNew(TOK_FUN, keyword);
+
     if (StringViewCmp(keyword, "var"))
       return TokenNew(TOK_VAR, keyword);
 

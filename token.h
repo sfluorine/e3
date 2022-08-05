@@ -1,30 +1,39 @@
-#pragma once 
+#pragma once
 
-#include "stringview.h"
+#include <string_view>
 
-typedef enum {
-  TOK_ID = 0, // x || y
-  TOK_NUMBER, // 69420
-  TOK_FUN, // fun
-  TOK_VAR, // var
-  TOK_RETURN, // return
-  TOK_ASSIGN, // =
-  TOK_LPAREN, // (
-  TOK_RPAREN, // )
-  TOK_LBRACE, // {
-  TOK_RBRACE, // }
-  TOK_SEMICOLON, // ;
-  TOK_ADD, // +
-  TOK_SUB, // -
-  TOK_MUL, // *
-  TOK_DIV, // /
-  TOK_EOF, 
-  TOK_UNKNOWN // Error token
-} TokenType;
+namespace e3
+{
 
-typedef struct {
+enum class TokenType {
+  Var,
+  Return,
+  Fun,
+  Id,
+  Number,
+  Add,
+  Sub,
+  Mul,
+  Div,
+  Lparen,
+  Rparen,
+  Lbrace,
+  Rbrace,
+  Comma,
+  Semicolon,
+  Unknown,
+  Eof,
+};
+
+struct Token {
+  Token()
+  : type(TokenType::Unknown), repr("") {}
+
+  Token(TokenType type, std::string_view repr)
+  : type(type), repr(repr) {}
+
   TokenType type;
-  StringView repr;
-} Token;
-
-Token TokenNew(TokenType type, StringView repr);
+  std::string_view repr;
+};
+  
+}

@@ -1,16 +1,37 @@
 #pragma once
 
+#include <string_view>
+
 #include "token.h"
 
-#include <stddef.h>
-#include <stdbool.h>
+namespace e3
+{
 
-typedef struct {
-  bool eof;
-  char* source;
-  size_t source_len;
-} Lexer;
+class Lexer {
+public:
+  Lexer()
+  : m_source(""), m_index(0), m_eof(true) {}
 
-Lexer LexerNew(char* source);
-void LexerAdvance(Lexer* lexer);
-Token LexerGetToken(Lexer* lexer);
+  Lexer(std::string_view source)
+  : m_source(source), m_index(0) 
+  {
+    m_eof = false;
+
+    if (m_source.data() == nullptr || m_source == "")
+      m_eof = true;
+  }
+
+  auto get_token() -> Token;
+
+private:
+  auto eof() const -> bool;
+  void advance();
+  void skip_whitespace();
+
+private:
+  std::string_view m_source;
+  size_t m_index;
+  bool m_eof;
+};
+
+} // namespace e3

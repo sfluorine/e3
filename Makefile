@@ -1,6 +1,9 @@
-CC = clang
-CFLAGS = -Wall -g
-SRC = main.c token.c stringview.c lexer.c
+CC = clang++
+CPPFLAGS = -Wall -std=c++17 -Os
+SRC = main.cpp lexer.cpp ast.cpp parser.cpp
 
 all:
-	$(CC) $(CFLAGS) $(SRC) -o e3
+	$(CC) $(CPPFLAGS) $(SRC) -o e3
+
+clean:
+	rm -f e3

@@ -41,6 +41,7 @@ enum class BinaryOp {
   Sub,
   Mul,
   Div,
+  Pow,
 };
 
 class BinaryOpExpr : public Expression {

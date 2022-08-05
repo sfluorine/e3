@@ -16,6 +16,7 @@ static std::map<TokenType, const char*> g_token_repr = {
   {TokenType::Sub, "-"},
   {TokenType::Mul, "*"},
   {TokenType::Div, "/"},
+  {TokenType::Pow, "^"},
   {TokenType::Lparen, "("},
   {TokenType::Rparen, ")"},
   {TokenType::Lbrace, "{"},
@@ -44,7 +45,7 @@ auto Parser::parse_term() -> std::unique_ptr<Expression> {
   if (term == nullptr)
     return nullptr;
 
-  while (expect(TokenType::Mul) || expect(TokenType::Div)) {
+  while (expect(TokenType::Pow) || expect(TokenType::Mul) || expect(TokenType::Div)) {
     auto op = m_current_token.type;
     advance();
 
@@ -53,6 +54,9 @@ auto Parser::parse_term() -> std::unique_ptr<Expression> {
       return nullptr;
 
     switch (op) {
+    case TokenType::Pow:
+      term = std::make_unique<BinaryOpExpr>(BinaryOp::Pow, std::move(term), std::move(right));
+      break;
     case TokenType::Mul:
       term = std::make_unique<BinaryOpExpr>(BinaryOp::Mul, std::move(term), std::move(right));
       break;

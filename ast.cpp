@@ -1,5 +1,7 @@
 #include "ast.h"
 
+#include <cmath>
+
 namespace e3
 {
 
@@ -18,6 +20,8 @@ auto BinaryOpExpr::execute() -> NumberValue{
     return NumberValue(m_lhs->execute().get_value() * m_rhs->execute().get_value());
   case BinaryOp::Div:
     return NumberValue(m_lhs->execute().get_value() / m_rhs->execute().get_value());
+  case BinaryOp::Pow:
+    return NumberValue(pow(m_lhs->execute().get_value(), m_rhs->execute().get_value()));
   }
 }
 

@@ -15,6 +15,7 @@ enum class TokenType {
   Sub,
   Mul,
   Div,
+  Pow,
   Lparen,
   Rparen,
   Lbrace,

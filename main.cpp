@@ -5,7 +5,7 @@
 #include "parser.h"
 
 int main(void) {
-  std::string source = "69420* 2";
+  std::string source = "2 ^ 5";
   auto parser = e3::Parser(source);
   auto result = parser.parse_expression();
 

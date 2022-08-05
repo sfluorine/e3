@@ -73,6 +73,13 @@ auto Lexer::get_token() -> Token {
     return Token(TokenType::Div, start);
   }
 
+  if (m_source[m_index] == '^') {
+    auto start = std::string_view(m_source.data() + m_index, 1);
+    advance();
+
+    return Token(TokenType::Pow, start);
+  }
+
   if (m_source[m_index] == '(') {
     auto start = std::string_view(m_source.data() + m_index, 1);
     advance();

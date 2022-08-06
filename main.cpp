@@ -23,6 +23,8 @@ int main(void) {
         std::cout << parser.error_queue().back() << '\n';
         parser.error_queue().pop();
       }
+
+      continue;
     }
 
     result->execute(env);

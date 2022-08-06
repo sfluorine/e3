@@ -108,6 +108,13 @@ auto Lexer::get_token() -> Token {
     return Token(TokenType::Rbrace, start);
   }
 
+  if (m_source[m_index] == '=') {
+    auto start = std::string_view(m_source.data() + m_index, 1);
+    advance();
+
+    return Token(TokenType::Assign, start);
+  }
+
   if (m_source[m_index] == ',') {
     auto start = std::string_view(m_source.data() + m_index, 1);
     advance();

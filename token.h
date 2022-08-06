@@ -20,6 +20,7 @@ enum class TokenType {
   Rparen,
   Lbrace,
   Rbrace,
+  Assign,
   Comma,
   Semicolon,
   Unknown,

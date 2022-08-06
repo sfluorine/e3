@@ -21,6 +21,7 @@ static std::map<TokenType, const char*> g_token_repr = {
   {TokenType::Rparen, ")"},
   {TokenType::Lbrace, "{"},
   {TokenType::Rbrace, "}"},
+  {TokenType::Assign, "="},
   {TokenType::Comma, ","},
   {TokenType::Semicolon, ";"},
   {TokenType::Unknown, "Unknown"},
@@ -29,15 +30,23 @@ static std::map<TokenType, const char*> g_token_repr = {
 
 auto Parser::parse_factor() -> std::unique_ptr<Expression> {
   auto token = m_current_token;
-  if (!eat(TokenType::Number))
-    return nullptr;
+  if (expect(TokenType::Number)) {
+    advance();
 
-  int32_t num = 0;
+    int32_t num = 0;
+    // convert the string view representation of a number to an integer
+    std::from_chars(token.repr.data(), token.repr.data() + token.repr.size(), num);
+    return std::make_unique<ValueExpr>(num);
+  }
 
-  // convert the string view representation of a number
-  std::from_chars(token.repr.data(), token.repr.data() + token.repr.size(), num);
+  if (expect(TokenType::Id)) {
+    advance();
+    return std::make_unique<VariableExpr>(std::string(token.repr));
+  }
 
-  return std::make_unique<ValueExpr>(num);
+  m_has_error = true;
+  m_error_queue.emplace("ERROR: expected: number or identifier");
+  return nullptr;
 }
 
 auto Parser::parse_term() -> std::unique_ptr<Expression> {
@@ -97,6 +106,31 @@ auto Parser::parse_expression() -> std::unique_ptr<Expression> {
   }
 
   return term; 
+}
+
+auto Parser::parse_variable_assignment() -> std::unique_ptr<Statement> {
+  if (!eat(TokenType::Var))
+    return nullptr;
+
+  auto id = m_current_token;
+  if (!eat(TokenType::Id))
+    return nullptr;
+
+  if (!eat(TokenType::Assign))
+    return nullptr;
+
+  auto expr = parse_expression();
+  if (expr == nullptr)
+    return nullptr;  
+
+  if (!eat(TokenType::Semicolon))
+    return nullptr;
+
+  return std::make_unique<VariableAssignmentStmt>(std::string(id.repr), std::move(expr));
+}
+
+auto Parser::parse_statement() -> std::unique_ptr<Statement> {
+  return parse_variable_assignment();
 }
 
 void Parser::advance() {

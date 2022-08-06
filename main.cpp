@@ -3,20 +3,32 @@
 
 #include "ast.h"
 #include "parser.h"
+#include "environment.h"
 
 int main(void) {
-  std::string source = "2 ^ 5";
-  auto parser = e3::Parser(source);
-  auto result = parser.parse_expression();
+  std::string source;
+  auto env = e3::Environment();
+  env.global_env["tf"] = 34;
+  env.global_env["ti"] = 35;
 
-  if (result == nullptr) {
-    for (int i = 0; i < parser.error_queue().size(); i++) {
-      std::cout << parser.error_queue().back() << '\n';
-      parser.error_queue().pop();
+  while (source != "quit") {
+    std::cerr << ">>> ";
+    std::getline(std::cin, source);
+
+    auto parser = e3::Parser(source);
+    auto result = parser.parse_variable_assignment();
+
+    if (result == nullptr) {
+      for (int i = 0; i < parser.error_queue().size(); i++) {
+        std::cout << parser.error_queue().back() << '\n';
+        parser.error_queue().pop();
+      }
     }
 
-    return 1;
-  }
+    result->execute(env);
 
-  std::cout << result->execute().get_value() << '\n';
+    for (const auto& var : env.global_env) {
+      std::cout << "name: " << var.first << " value: " << var.second << '\n';
+    }
+  }
 }

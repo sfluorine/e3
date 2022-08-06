@@ -19,6 +19,8 @@ public:
   auto parse_factor() -> std::unique_ptr<Expression>;
   auto parse_term() -> std::unique_ptr<Expression>;
   auto parse_expression() -> std::unique_ptr<Expression>;
+  auto parse_variable_assignment() -> std::unique_ptr<Statement>;
+  auto parse_statement() -> std::unique_ptr<Statement>;
 
   auto has_error() const -> bool { return m_has_error; }
   std::queue<std::string>& error_queue() { return m_error_queue; }
